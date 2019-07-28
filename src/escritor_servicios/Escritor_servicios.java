@@ -22,6 +22,7 @@ import org.yaml.snakeyaml.Yaml;
 public class Escritor_servicios {
 
     public static Service construir_servicio(String identifier, Map<String, Object> obj){
+        System.out.println(obj.get("input").getClass());
         Service s = new Service();
         s.setIdentifier(identifier);
         Set keys = obj.keySet();

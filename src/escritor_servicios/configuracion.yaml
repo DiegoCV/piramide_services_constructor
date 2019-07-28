@@ -7,7 +7,27 @@ s_1:
   name: registrar_vendedor
   url: /vendedor/registrar
   type: post
-  input: kilo
+  input:  
+    - codigo
+    - pass
+    - julieta : 
+        - edad
+        - peso
+        - perfil:
+            - situacion
+        - colegio:    
+            municipio: 
+            - dsd
   output:
     - status
  
+#Primer servicio
+s_2: 
+  name: registrar_vendedor
+  url: /vendedor/registrar
+  type: post
+  input:  
+    huli: gd
+  output:
+    - status
+    

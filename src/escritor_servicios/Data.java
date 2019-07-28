@@ -15,8 +15,13 @@ public class Data {
 
     private String name;
     private ArrayList<Data> sub_data;
-    private ArrayList<String> values;
 
+    public Data() {
+        this.name = "";
+        this.sub_data = new ArrayList<>();
+    }
+
+    
     public String getName() {
         return name;
     }
@@ -29,17 +34,15 @@ public class Data {
         return sub_data;
     }
 
-    public void setSub_data(ArrayList<Data> sub_data) {
-        this.sub_data = sub_data;
+    public void setSub_data(Data sub_data) {
+        this.sub_data.add(sub_data);
     }
 
-    public ArrayList<String> getValues() {
-        return values;
+    @Override
+    public String toString() {
+        return "Data{" + "name=" + name + ", sub_data=" + sub_data + '}';
     }
 
-    public void setValues(ArrayList<String> values) {
-        this.values = values;
-    }
     
     
    
