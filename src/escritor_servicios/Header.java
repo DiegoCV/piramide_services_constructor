@@ -17,6 +17,11 @@ class Header {
         this.value = value;
     }
 
+    public Header(String key) {
+        this.key = key;
+        this.value = "";
+    }
+    
     public String getKey() {
         return key;
     }

@@ -3,31 +3,49 @@
 # (En una proxima version se extendera la funcionalidad)
 
 #Primer servicio
-s_1: 
-  name: registrar_vendedor
-  url: /vendedor/registrar
+#s_1: 
+#  name: registrar_vendedor
+#  url: /vendedor/registrar
+#  type: post
+#  input:  
+#    - codigo
+#    - pass
+#    - julieta : 
+#        - edad
+#        - peso
+#        - perfil:
+#            - situacion
+#        - colegio:    
+#            municipio: 
+#            - dsd
+#  output:
+#    - status
+# 
+##Segundo servicio
+#s_2:
+#  name: verificar_vendedor
+#  url: /vendedor/verificar
+#  type: post
+#  input:
+#    - codigo
+#    - pass
+#  output:
+#    - status
+
+#Tercer servicio
+s_1:
+  name: agendar_sesiones
+  url: /sesion/agendar
+  headers: x-access-token
   type: post
-  input:  
-    - codigo
-    - pass
-    - julieta : 
-        - edad
-        - peso
-        - perfil:
-            - situacion
-        - colegio:    
-            municipio: 
-            - dsd
-  output:
-    - status
- 
-#Primer servicio
-s_2: 
-  name: registrar_vendedor
-  url: /vendedor/registrar
-  type: post
-  input:  
-    huli: gd
+  input:
+   sesion:
+    - titulo
+    - descripcion
+    - color
+    - textcolor
+    - inicio
+    - anfitrion
   output:
     - status
     

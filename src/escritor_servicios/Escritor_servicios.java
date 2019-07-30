@@ -22,7 +22,7 @@ import org.yaml.snakeyaml.Yaml;
 public class Escritor_servicios {
 
     public static Service construir_servicio(String identifier, Map<String, Object> obj){
-        System.out.println(obj.get("input").getClass());
+//        System.out.println(obj);
         Service s = new Service();
         s.setIdentifier(identifier);
         Set keys = obj.keySet();
@@ -45,9 +45,9 @@ public class Escritor_servicios {
                 servicios[i-1] = Escritor_servicios.construir_servicio("s_"+i,(Map<String, Object>) obj.get("s_"+i));
             }
 //
-//            for (Service s : servicios) {
-//                System.out.println(s.toString());
-//            }
+            for (Service s : servicios) {
+                System.out.println(s.getFormattedBody());
+            }
            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Escritor_servicios.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,32 +56,5 @@ public class Escritor_servicios {
 
 }
 //{vendedor=[nombre, celular, {juju=[gff, kiki, {lol=[fr, ñlop]}]}]}
-//#Segundo servicio
-//s_2:
-//  name: verificar_vendedor
-//  url: /vendedor/verificar
-//  type: post
-//  input:
-//    - codigo
-//    - pass
-//  output:
-//    - status
-//
-//#Tercer servicio
-//s_3:
-//  name: agendar_sesiones
-//  url: /sesion/agendar
-//  type: post
-//  headers: 
-//    -x-access-token
-//  input:
-//    sesion:
-//      - titulo
-//      - descripcion
-//      - color
-//      - textcolor
-//      - inicio
-//      - anfitrion
-//  output:
-//    - status
+
 

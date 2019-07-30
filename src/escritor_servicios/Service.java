@@ -14,89 +14,106 @@ import java.util.Set;
  * @author diegocv
  */
 public class Service {
-    
+
     private String identifier;
     private String name;
     private String url;
     private String type;
     private String contentType;
+    private String dataType;
     private String miDataType;
     private Headers headers;
     private Data input;
-    private DataInput output;
-    
+    private Data output;
+
     public Service() {
-       this.input = new Data();
-       this.input.setName("data");
+        this.input = new Data();
+        this.output = new Data();
+        this.headers = new Headers();
+        this.input.setName("data");
+        this.output.setName("data");
+
     }
-    
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
     public String getIdentifier() {
         return identifier;
     }
-    
+
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getUrl() {
         return url;
     }
-    
+
     public void setUrl(String url) {
         this.url = url;
     }
-    
+
     public String getType() {
         return type;
     }
-    
+
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public Data getInput() {
         return input;
     }
-    
-    public Data setInput(Data data, Object contend) {
+
+    public Data setData(Data data, Object contend) {
         if (contend.getClass().isAssignableFrom(java.util.LinkedHashMap.class)) {
-            LinkedHashMap my_contend = (LinkedHashMap) contend;            
+            LinkedHashMap my_contend = (LinkedHashMap) contend;
             Set keys = my_contend.keySet();
             for (Object key : keys) {
                 Data aux = new Data();
                 aux.setName((String) key);
-                aux = setInput(aux, my_contend.get((String) key));
+                aux = setData(aux, my_contend.get((String) key));
                 data.setSub_data(aux);
-            }      
+            }
         } else if (contend.getClass().isAssignableFrom(java.util.ArrayList.class)) {
             ArrayList my_contend = (ArrayList) contend;
             for (Object object : my_contend) {
-                data = setInput(data, object);                        
+                data = setData(data, object);
             }
-        } else if (contend.getClass().isAssignableFrom(String.class)) {     
+        } else if (contend.getClass().isAssignableFrom(String.class)) {
             Data aux = new Data();
             aux.setName((String) contend);
             data.setSub_data(aux);
         }
         return data;
     }
-    
-    public void setOutput(DataInput output) {
-        this.output = output;
-    }
-    
+
     String getFormattedInput() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     String getFormattedBody() {
         String body = "url: this.get_url('" + this.identifier + "'),\n";
         body = body.concat("type: '" + this.type + "',");
@@ -106,7 +123,7 @@ public class Service {
             body = body.concat("contentType: \"" + this.contentType + "\",\n");
         }
         if (this.input != null) {
-//            body = body.concat("data: " + this.input.getFormattedDataInput() + ",\n");
+            body = body.concat("data: " + getFormattedData(this.input) + ",\n");
         }
         if (this.headers != null) {
             body = body.concat("headers: {" + this.headers.getFormattedHeaders() + "},\n");
@@ -117,36 +134,59 @@ public class Service {
         return body;
     }
 
-    //url: this.obtener_url('"+servicio.getIndice()+"'),\n\t\ttype: '"servicio.getType()"',
-//        contentType: "application/json; charset=utf-8",
-//        data: JSON.stringify({ "sesion":{ "titulo":titulo, "descripcion":descripcion, "color":color, "textcolor":textcolor, "inicio":inicio, "anfitrion":anfitrion } }),
-//        headers: {
-//          "x-access-token": this.local.obtener_token()
-//        },
-//        
-    @Override
-    public String toString() {
-        return "Servicio{" + "indice=" + identifier + ", name=" + name + ", url=" + url + ", type=" + type + ", contentType=" + contentType + ", miDataType=" + miDataType + ", headers=" + headers + ", input=" + input + ", output=" + output + '}';
-    }
-    
     void setAtributo(String key, Object value) {
         switch (key) {
             case "name":
                 this.setName((String) value);
                 break;
-            
             case "url":
                 this.setUrl((String) value);
                 break;
-            
             case "type":
                 this.setType((String) value);
                 break;
-            
-            case "input":
-                this.input = setInput(this.input, value);
-                System.out.println(this.input);
+            case "contentType":
+                this.setContentType((String) value);
                 break;
+            case "datatype":
+                this.setDataType((String) value);
+                break;
+            case "headers":
+                this.setHeaders(value);
+                break;
+            case "input":
+                this.input = setData(this.input, value);
+                break;
+            case "output":
+                this.output = setData(this.output, value);
+                break;
+            default:
+                System.err.println("Atributo no valido: " + key);
         }
     }
+
+    private void setHeaders(Object contend) {
+        if (contend.getClass().isAssignableFrom(java.util.ArrayList.class)) {
+            ArrayList my_contend = (ArrayList) contend;
+            my_contend.forEach((object) -> {
+                this.headers.setHeader(new Header((String) object));
+            });
+        } else if (contend.getClass().isAssignableFrom(String.class)) {
+            this.headers.setHeader(new Header((String) contend));
+        }
+    }
+
+    private String getFormattedData(Data input) {
+        if (this.input.getSub_data().isEmpty()) {
+            return '"' + this.input.getName() + "\":\"\",";
+        } else {
+            String rta = "";
+            for (Data data : input.getSub_data()) {
+                rta += '"' + data.getName() + "\":{" + getFormattedData(data) + "},";
+            }   
+            return rta;
+        }
+    }
+    
+    
 }
